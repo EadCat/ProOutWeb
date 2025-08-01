@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Progressive Artwork Outpainting via Latent Diffusion Models</title>
+    <!-- Bootstrap -->
+    <link href="css/bootstrap-4.4.1.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> 
+  </head>
+
+  <!-- cover -->
+  <section>
+    <div class="jumbotron text-center mt-0">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <h2>Progressive Artwork Outpainting via Latent Diffusion Models</h2>
+            <h4 style="color:#5a6268;">ICCV 2025</h4>
+            <br>
+            <hr>
+            <h6> 
+              <a href="https://eadcat.github.io" target="_blank">Dae-Young Song</a><sup>1</sup>,
+              Jung-Jae Yu<sup>1</sup>, and
+              <a href="https://scholar.google.com/citations?user=zj-NER4AAAAJ&hl=en" target="_blank">Donghyeon Cho</a><sup>2</sup>
+                <br><br>
+            <p><sup>1</sup>Electronics and Telecommunication Research Institute (ETRI), South Korea <br>
+              <sup>2</sup>Computer Vision Lab., Hanyang University, South Korea
+                
+
+            <div class="row justify-content-center">
+              <div class="column">
+                  <p class="mb-5">
+                    <a class="btn btn-large btn-light disabled" href="#" role="button" aria-disabled="true" tabindex="-1" style="pointer-events: none; opacity: 0.6;">
+                      <i class="fa fa-file"></i> Paper
+                    </a>
+                  </p>
+              </div>
+              <div class="column">
+                <p class="mb-5">
+                  <a class="btn btn-large btn-light disabled" href="#" role="button" aria-disabled="true" tabindex="-1" style="pointer-events: none; opacity: 0.6;">
+                    <i class="fa fa-file"></i> Supplementary
+                  </a>
+                </p>
+              </div>
+              <div class="column">
+                <p class="mb-5">
+                  <a class="btn btn-large btn-light" href="https://github.com/EadCat/ProOut" role="button"  target="_blank">
+                    <i class="fa fa-github-alt"></i> Code
+                  </a>
+                </p>
+              </div>
+              <div class="column">
+                <p class="mb-5">
+                  <a class="btn btn-large btn-light disabled" href="#" role="button" aria-disabled="true" tabindex="-1" style="pointer-events: none; opacity: 0.6;">
+                    <i class="fa fa-youtube-play" aria-hidden="true"></i> Video
+                  </a>
+                </p>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- abstract -->
+  <section>
+    <div class="container">
+      <div class="row">
+        <div class="col-12 text-center">
+          <h3>Abstract</h3>
+            <p style="font-family: 'Chewy', 'Caveat', cursive; font-size: 1em; color: #444; text-align: center;">
+              The source code is provided only for data augmentation! For more details, please refer to the repository.
+            </p>
+            <hr style="margin-top:0px">
+            <video style="width:auto; height:100%; max-height:400px; object-fit:cover;" playsinline autoplay loop preload muted>
+              <source src="assets/outpainting.mp4" type="video/mp4">
+            </video>
+            <!-- <hr style="margin-bottom:0px"> -->
+          <!-- <br><br> -->
+          <!-- Abstract below -->
+          <br><br>
+          <p class="text-justify">Latent diffusion models have demonstrated superior performance over traditional methods in generating highly detailed and aesthetically pleasing images, which makes them widely used for various image generation and editing tasks, including outpainting. However, most LDM-based outpainting methods impose constraints on resolution and aspect ratio, often leading to the loss of local details and blurring. One way to address these issues is progressive outpainting, where the image is extended outward incrementally. However, naive progressive outpainting suffers from two key challenges: (1) difficulty in effectively capturing global context, making it hard to maintain the original context, and (2) a tendency to generate unnatural patterns. These challenges are particularly pronounced in art, where artists pre-design the composition before painting. As a result, existing methods often introduce visual inconsistencies that distract the viewer and diminish the intended artistic emphasis. To address these limitations, we propose two types of composition planning modules that enhance progressive outpainting by leveraging global structural guidance. These modules guide a pre-trained stable diffusion model to consider the overall composition, enabling realistic and contextually appropriate artwork completion without labor-intensive user prompts. Through experiments on diverse artwork images, we show the effectiveness of our proposed method both quantitatively and qualitatively. </p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <br><br>
+
+  <!-- Model Architecture -->
+  <section>
+    <div class="container">
+      <div class="row">
+        <div class="col-12 text-center">
+            <h3>Progressive Outpainting Task</h3>
+            <hr style="margin-top:0px">
+            <img src="assets/Pipeline.png", alt="The image cannot be displayed!", width=80%>
+            <br><br><br>
+            <p class="text-left">
+              This project was inspired by <a href="https://github.com/lkwq007/stablediffusion-infinity" target="_blank">stablediffusion-infinity</a>.
+              When performing outpainting based on the progressive approach with Latent Diffusion Models, it is difficult to preserve the overall context and style of the original input as the number of generations increases.
+              To avoid this, if outpainting is performed within a single window, it becomes challenging to achieve high-resolution outpainting and blurring may occur.
+              To overcome these limitations, we propose a novel progressive outpainting method that also considers a global window.
+              The module that considers the global window is connected to the frozen pre-trained denoiser and trained, which reduces training time while preserving the performance of the pre-trained denoiser. 
+              Our perspective is fundamentally different from conventional reference-based painting approaches that explicitly inject objects or styles from reference images.
+              Even if there is no corresponding object to be generated, our method infers plausible composition automatically without explicit information.
+              For more details, please refer to the paper and supplementary materials.
+            </p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <br><br><br>
+
+  <!-- Reconstruction Outputs -->
+  <section>
+    <div class="container">
+      <div class="row">
+        <div class="col-12 text-center">
+            <p style="font-family: 'Chewy', 'Caveat', cursive; font-size: 2em; color: #444; text-align: center;">
+              Gallery
+            </p>
+            <p style="font-family: 'Chewy', 'Caveat', cursive; font-size: 1em; color: #444; text-align: center;">
+              These results are not cherry-picked. Failed cases are also included.
+              Additional results are available in the main paper and the supplementary materials.
+            </p>
+            
+            <hr style="margin-top:0px">
+            <div style="margin-bottom: 24px;">
+              <p style="font-family: 'Chewy', 'Caveat', cursive; font-size: 1.5em; color: #444; text-align: center;">
+                🖼️ Photorealistic outpainting at 2875×512 resolution<br>
+                DPM++ 2M SDE Karras
+              </p>
+            </div>
+            <link href="https://fonts.googleapis.com/css?family=Caveat:700&display=swap" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css2?family=Chewy&display=swap" rel="stylesheet">
+
+            <!-- dock -->
+            <div style="position: relative; text-align: center; margin-bottom: 6px;">
+              <img src="assets/photo/input/dock.png" style="max-width:100%; height:auto; display:block;">
+              <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                Input
+              </div>
+            </div>
+            <div style="position: relative; text-align: center; margin-bottom: 6px;">
+              <img src="assets/photo/vanila/dock.png" style="max-width:100%; height:auto; display:block;">
+              <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                Vanilla
+              </div>
+            </div>
+            <div style="position: relative; text-align: center; margin-bottom: 10px;">
+              <img src="assets/photo/ours/dock.png" style="max-width:100%; height:auto; display:block;">
+              <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                Ours
+              </div>
+            </div>
+            
+            <hr style="border: 0; height: 2px; background: #cccccc; margin: 10px 0;">
+            <!-- helmet -->
+            <div style="position: relative; text-align: center; margin-bottom: 6px;">
+              <img src="assets/photo/input/helmet.png" style="max-width:100%; height:auto; display:block;">
+              <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                Input
+              </div>
+            </div>
+            <div style="position: relative; text-align: center; margin-bottom: 6px;">
+              <img src="assets/photo/vanila/helmet.png" style="max-width:100%; height:auto; display:block;">
+              <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                Vanilla
+              </div>
+            </div>
+            <div style="position: relative; text-align: center; margin-bottom: 10px;">
+              <img src="assets/photo/ours/helmet.png" style="max-width:100%; height:auto; display:block;">
+              <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                Ours
+              </div>
+            </div>
+            <hr style="border: 0; height: 2px; background: #cccccc; margin: 10px 0;">
+
+            <!-- lamborghini -->
+            <div style="position: relative; text-align: center; margin-bottom: 6px;">
+              <img src="assets/photo/input/lamborghini.png" style="max-width:100%; height:auto; display:block;">
+              <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                Input
+              </div>
+            </div>
+            <div style="position: relative; text-align: center; margin-bottom: 6px;">
+              <img src="assets/photo/vanila/lamborghini.png" style="max-width:100%; height:auto; display:block;">
+              <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                Vanilla
+              </div>
+            </div>
+            <div style="position: relative; text-align: center; margin-bottom: 10px;">
+              <img src="assets/photo/ours/lamborghini.png" style="max-width:100%; height:auto; display:block;">
+              <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                Ours
+              </div>
+            </div>
+
+            <hr style="border: 0; height: 2px; background: #cccccc; margin: 10px 0;">
+
+            <!-- pyramid -->
+            <div style="position: relative; text-align: center; margin-bottom: 6px;">
+              <img src="assets/photo/input/pyramid.png" style="max-width:100%; height:auto; display:block;">
+              <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                Input
+              </div>
+            </div>
+            <div style="position: relative; text-align: center; margin-bottom: 6px;">
+              <img src="assets/photo/vanila/pyramid.png" style="max-width:100%; height:auto; display:block;">
+              <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                Vanilla
+              </div>
+            </div>
+            <div style="position: relative; text-align: center; margin-bottom: 10px;">
+              <img src="assets/photo/ours/pyramid.png" style="max-width:100%; height:auto; display:block;">
+              <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                Ours
+              </div>
+            </div>
+            
+            <hr style="border: 0; height: 2px; background: #cccccc; margin: 10px 0;">
+
+            <!-- rabbit -->
+            <div style="position: relative; text-align: center; margin-bottom: 6px;">
+              <img src="assets/photo/input/rabbit.png" style="max-width:100%; height:auto; display:block;">
+              <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                Input
+              </div>
+            </div>
+            <div style="position: relative; text-align: center; margin-bottom: 6px;">
+              <img src="assets/photo/vanila/rabbit.png" style="max-width:100%; height:auto; display:block;">
+              <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                Vanilla
+              </div>
+            </div>
+            <div style="position: relative; text-align: center; margin-bottom: 10px;">
+              <img src="assets/photo/ours/rabbit.png" style="max-width:100%; height:auto; display:block;">
+              <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                Ours
+              </div>
+            </div>
+
+            <hr style="border: 0; height: 2px; background: #cccccc; margin: 10px 0;">
+
+            <div style="margin-bottom: 24px;">
+              <p style="font-family: 'Chewy', 'Caveat', cursive; font-size: 1.5em; color: #444; text-align: center;">
+                 🎨 Artwork outpainting at approximately 3K × 1K resolution<br>
+                 DPM++ 2M Karras
+              </p>
+            </div>
+            <link href="https://fonts.googleapis.com/css?family=Caveat:700&display=swap" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css2?family=Chewy&display=swap" rel="stylesheet">
+
+            <!-- Gleaners -->
+            <div style="position: relative; text-align: center; margin-bottom: 6px;">
+              <img src="assets/art/input/2773-The-Gleaners-output-0010241237.png" style="max-width:100%; height:auto; display:block;">
+              <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                Input
+              </div>
+            </div>
+            <div style="position: relative; text-align: center; margin-bottom: 6px;">
+              <img src="assets/art/vanila/2773-The-Gleaners-output-0010241237.png" style="max-width:100%; height:auto; display:block;">
+              <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                Vanilla
+              </div>
+            </div>
+                         <div style="position: relative; text-align: center; margin-bottom: 10px;">
+               <img src="assets/art/ours/2773-The-Gleaners-output-0010241237.png" style="max-width:100%; height:auto; display:block;">
+               <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                 Ours
+               </div>
+             </div>
+             
+             <hr style="border: 0; height: 2px; background: #cccccc; margin: 10px 0;">
+             
+             <!-- over-the-hills-and-far-away -->
+             <div style="position: relative; text-align: center; margin-bottom: 6px;">
+               <img src="assets/art/input/over-the-hills-and-far-away-output-0010241237.png" style="max-width:100%; height:auto; display:block;">
+               <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                 Input
+               </div>
+             </div>
+             <div style="position: relative; text-align: center; margin-bottom: 6px;">
+               <img src="assets/art/vanila/over-the-hills-and-far-away-output-0010241237.png" style="max-width:100%; height:auto; display:block;">
+               <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                 Vanilla
+               </div>
+             </div>
+             <div style="position: relative; text-align: center; margin-bottom: 10px;">
+               <img src="assets/art/ours/over-the-hills-and-far-away-output-0010241237.png" style="max-width:100%; height:auto; display:block;">
+               <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                 Ours
+               </div>
+             </div>
+             
+             <hr style="border: 0; height: 2px; background: #cccccc; margin: 10px 0;">
+             
+             <!-- on-the-sweetwater-near-the-devil-s-gate-nebraska-1860 -->
+             <div style="position: relative; text-align: center; margin-bottom: 6px;">
+               <img src="assets/art/input/on-the-sweetwater-near-the-devil-s-gate-nebraska-1860-output-0010241237.png" style="max-width:100%; height:auto; display:block;">
+               <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                 Input
+               </div>
+             </div>
+             <div style="position: relative; text-align: center; margin-bottom: 6px;">
+               <img src="assets/art/vanila/on-the-sweetwater-near-the-devil-s-gate-nebraska-1860-output-0010241237.png" style="max-width:100%; height:auto; display:block;">
+               <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                 Vanilla
+               </div>
+             </div>
+             <div style="position: relative; text-align: center; margin-bottom: 10px;">
+               <img src="assets/art/ours/on-the-sweetwater-near-the-devil-s-gate-nebraska-1860-output-0010241237.png" style="max-width:100%; height:auto; display:block;">
+               <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                 Ours
+               </div>
+             </div>
+             
+             <hr style="border: 0; height: 2px; background: #cccccc; margin: 10px 0;">
+             
+             <!-- longford-castle-from-the-south-west-1743 -->
+             <div style="position: relative; text-align: center; margin-bottom: 6px;">
+               <img src="assets/art/input/longford-castle-from-the-south-west-1743-output-0010241237.png" style="max-width:100%; height:auto; display:block;">
+               <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                 Input
+               </div>
+             </div>
+             <div style="position: relative; text-align: center; margin-bottom: 6px;">
+               <img src="assets/art/vanila/longford-castle-from-the-south-west-1743-output-0010241237.png" style="max-width:100%; height:auto; display:block;">
+               <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                 Vanilla
+               </div>
+             </div>
+             <div style="position: relative; text-align: center; margin-bottom: 10px;">
+               <img src="assets/art/ours/longford-castle-from-the-south-west-1743-output-0010241237.png" style="max-width:100%; height:auto; display:block;">
+               <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                 Ours
+               </div>
+             </div>
+             
+             <hr style="border: 0; height: 2px; background: #cccccc; margin: 10px 0;">
+             
+             <!-- james-tissot_room-overlooking-the-harbour -->
+             <div style="position: relative; text-align: center; margin-bottom: 6px;">
+               <img src="assets/art/input/james-tissot_room-overlooking-the-harbour-output-0010241237.png" style="max-width:100%; height:auto; display:block;">
+               <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                 Input
+               </div>
+             </div>
+             <div style="position: relative; text-align: center; margin-bottom: 6px;">
+               <img src="assets/art/vanila/james-tissot_room-overlooking-the-harbour-output-0010241237.png" style="max-width:100%; height:auto; display:block;">
+               <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                 Vanilla
+               </div>
+             </div>
+             <div style="position: relative; text-align: center; margin-bottom: 10px;">
+               <img src="assets/art/ours/james-tissot_room-overlooking-the-harbour-output-0010241237.png" style="max-width:100%; height:auto; display:block;">
+               <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                 Ours
+               </div>
+             </div>
+             
+             <hr style="border: 0; height: 2px; background: #cccccc; margin: 10px 0;">
+             
+             <!-- claude-monet_the-departure-of-the-boats-etretat -->
+             <div style="position: relative; text-align: center; margin-bottom: 6px;">
+               <img src="assets/art/input/claude-monet_the-departure-of-the-boats-etretat-output-0010241237.png" style="max-width:100%; height:auto; display:block;">
+               <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                 Input
+               </div>
+             </div>
+             <div style="position: relative; text-align: center; margin-bottom: 6px;">
+               <img src="assets/art/vanila/claude-monet_the-departure-of-the-boats-etretat-output-0010241237.png" style="max-width:100%; height:auto; display:block;">
+               <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                 Vanilla
+               </div>
+             </div>
+             <div style="position: relative; text-align: center; margin-bottom: 10px;">
+               <img src="assets/art/ours/claude-monet_the-departure-of-the-boats-etretat-output-0010241237.png" style="max-width:100%; height:auto; display:block;">
+               <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                 Ours
+               </div>
+             </div>
+             
+             <hr style="border: 0; height: 2px; background: #cccccc; margin: 10px 0;">
+             
+             <!-- claude-monet_garden-at-sainte-adresse -->
+             <div style="position: relative; text-align: center; margin-bottom: 6px;">
+               <img src="assets/art/input/claude-monet_garden-at-sainte-adresse-output-0010241237.png" style="max-width:100%; height:auto; display:block;">
+               <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                 Input
+               </div>
+             </div>
+             <div style="position: relative; text-align: center; margin-bottom: 6px;">
+               <img src="assets/art/vanila/claude-monet_garden-at-sainte-adresse-output-0010241237.png" style="max-width:100%; height:auto; display:block;">
+               <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                 Vanilla
+               </div>
+             </div>
+             <div style="position: relative; text-align: center; margin-bottom: 10px;">
+               <img src="assets/art/ours/claude-monet_garden-at-sainte-adresse-output-0010241237.png" style="max-width:100%; height:auto; display:block;">
+               <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                 Ours
+               </div>
+             </div>
+             
+             <hr style="border: 0; height: 2px; background: #cccccc; margin: 10px 0;">
+             
+             <!-- aleksey-savrasov_a-spring-day-1873 -->
+             <div style="position: relative; text-align: center; margin-bottom: 6px;">
+               <img src="assets/art/input/aleksey-savrasov_a-spring-day-1873-output-0010241237.png" style="max-width:100%; height:auto; display:block;">
+               <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                 Input
+               </div>
+             </div>
+             <div style="position: relative; text-align: center; margin-bottom: 6px;">
+               <img src="assets/art/vanila/aleksey-savrasov_a-spring-day-1873-output-0010241237.png" style="max-width:100%; height:auto; display:block;">
+               <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                 Vanilla
+               </div>
+             </div>
+             <div style="position: relative; text-align: center; margin-bottom: 10px;">
+               <img src="assets/art/ours/aleksey-savrasov_a-spring-day-1873-output-0010241237.png" style="max-width:100%; height:auto; display:block;">
+               <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight:bold; font-size: 1.1em;">
+                 Ours
+               </div>
+             </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+  <br><br>
+
+  <!-- Contact -->
+  <section>
+    <div class="container">
+      <div class="row">
+        <div class="col-12 text-center">
+            <h3>Contact</h3>
+            <hr style="margin-top:0px">
+            <p class="text-center">
+              For any questions, discussions, or commercial use inquiries, please contact the email below. <br>
+              eadyoung@etri.re.kr
+            <br>
+        </div>
+      </div>
+    </div>
+  </section>
+  <br><br>
+  
+  <!-- Citing -->
+  <div class="container">
+    <div class="row ">
+      <div class="col-12">
+        <div class="col-12 text-center"> 
+          <h3>Citation</h3>
+        </div>
+          <hr style="margin-top:0px">
+              <pre style="background-color: #e9eeef;padding: 1.25em 1.5em">
+<code>
+@inproceedings{song2025proout,
+  title={Progressive Artwork Outpainting via Latent Diffusion Models},
+  author={Song, Dae-Young and Yu, Jung-Jae and Cho, Donghyeon},
+  booktitle={Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
+  year={2025}
+}
+
+</code></pre>
+          <hr>
+      </div>
+    </div>
+  </div>
+
+  <footer class="text-center" style="margin-bottom:10px">
+    Thanks to <a href="https://lioryariv.github.io/" target="_blank">Lior Yariv</a> for the website template.
+</footer>
+
+</body>
+</html>
