@@ -1,5 +1,5 @@
 A Project Page Hosting Progressive Artwork Outpainting via Latent Diffusion Models
 
-please go to: https://eadcat.github.io/DIFu/
+please go to: https://eadcat.github.io/ProOutWeb/
 
-Note: Initial upload: 2023-06-12
+Note: Initial upload: 2025-08-01
